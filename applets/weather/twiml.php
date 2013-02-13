@@ -25,6 +25,11 @@ $digits = clean_digits($ci->input->get_post('Digits'));
 if(!empty($digits))
   $zip = $digits;
 
+$prefs = array(
+  'voice' => $ci->vbx_settings->get('voice', $ci->tenant->id),
+  'language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
+);
+
 $response = new TwimlResponse;
 
 if(!empty($zip)) {
@@ -38,15 +43,9 @@ if(!empty($zip)) {
 
 	if(AppletInstance::getFlowType() == 'voice') {
   	if($weather->error)
-      $response->say($weather->error->description, array(
-        'voice' => $ci->vbx_settings->get('voice', $ci->tenant->id),
-        'voice_language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
-      ));
+      $response->say($weather->error->description, $prefs);
     else
-  		$response->say("The current conditions in {$weather->current_observation->display_location->city}, {$weather->current_observation->display_location->state} are {$weather->current_observation->temp_f} degrees and {$weather->current_observation->weather}.", array(
-  			'voice' => $ci->vbx_settings->get('voice', $ci->tenant->id),
-  			'voice_language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
-  		));
+  		$response->say("The current conditions in {$weather->current_observation->display_location->city}, {$weather->current_observation->display_location->state} are {$weather->current_observation->temp_f} degrees and {$weather->current_observation->weather}.", $prefs);
 		$next = AppletInstance::getDropZoneUrl('next');
 		if(!empty($next))
 			$response->redirect($next);
@@ -60,10 +59,7 @@ if(!empty($zip)) {
 }
 elseif($flow_type == 'voice' && $location == 'prompt') {
   $gather = $response->gather(array('numDigits' => 5));
-  $gather->say('Please enter your ZIP code.', array(
-		'voice' => $ci->vbx_settings->get('voice', $ci->tenant->id),
-		'voice_language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
-	));
+  $gather->say('Please enter your ZIP code.', $prefs);
 	$response->redirect();
 }
 
