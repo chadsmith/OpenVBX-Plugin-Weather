@@ -1,0 +1,6 @@
+{
+	"name" : "Weather",
+	"sms_name" : "Weather",
+	"description" : "Returns the current forecast.",
+	"type" : ["sms", "voice"]
+}

@@ -1,0 +1,12 @@
+{
+  "name" : "Weather",
+  "author" : "Chad Smith <chad@nospam.me>",
+  "description" : "Report the weather with OpenVBX",
+  "url" : "http://twitter.com/chadsmith",
+  "links" : [{
+    "menu" : "Weather",
+    "url" : "weather",
+    "script" : "settings.php",
+    "label" : "Settings"
+  }]
+}
